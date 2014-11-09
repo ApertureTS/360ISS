@@ -60,12 +60,80 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'signups',
+    
+     # this is for django-photologue
+    'django.contrib.sites',
+
+    # my apps
+    # 'signups',
     'drinker',
     'dragdrop',
+       
+    # this is for django-photologue
+    # 'photologue',
+    # 'sortedm2m',
+    'south', # Only if you're relying on South for migrations
+    # 'photologue_custom',
+    # 'taggit',
+
+    # this is for django-imagekit
+    # this app was built using pip install django-imagekit, thats why we do not
+    # see a dedicated app folder
+    'imagekit',
+
+    # this is for django-photo-albums
+    # 'generic_images',
+    # 'annoying',
+    # 'photo_albums',
+
+    # using ajax, this can possibly make things slightly easier
+    # with images
+    # 'django_ajax',
+
+    # using PHP in Django
+    # 'django_php',
+    
+    # this is the django ajax dynamic upload feature
+    # 'upload_image',
+    # 'fileupload',
 )
 
-# Goes through MIDDLEWARE_CLASSES first then looks for "views" and looks for INSTALLED_APPS
+# for PHP
+# PHP_CGI = '/usr/local/bin/php-cgi'
+
+# this is for django's ajax upload feature
+
+# Enabling the sites framework
+SITE_ID = 1
+
+# using South migrations for photologue
+SOUTH_MIGRATION_MODULES = {
+    # 'photologue': 'photologue.south_migrations',
+}
+
+
+
+# cache configuration to store our user's session data
+# remember we want a persistent session so this allows the user to re-access the 
+# website with images loaded/displayed at login
+# 
+# TAKEN FROM THE DJANGO DOCUMENTATION:
+# This uses a write through cache  every write to the cache will also be 
+# written to the database. Session reads only use the database if the data is 
+# not already in the cache.
+# 
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db" 
+
+# using file-based sessions
+# can we use this to retrieve the user's session information in which we can use 
+# for our string_builder feature?
+# SESSION_ENGINE = "django.contrib.sessions.backends.file"
+SESSION_FILE_PATH = ""
+
+
+
+# Goes through MIDDLEWARE_CLASSES first then looks for "views" and looks for 
+# INSTALLED_APPS
 MIDDLEWARE_CLASSES = (
     # for authentication in web requests
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -75,6 +143,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 )
 
 # where URL's are handles in each part 
@@ -121,11 +190,18 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 # what is rendered by the browser, not so much Django
 STATIC_URL = '/static/'
+
+# this is for photologue (not working)
+# TEMPLATE_LOADERS = (
+#     'django.template.loaders.filesystem.Loader',
+#     'django.template.loaders.app_directories.Loarder',
+# )
+
+# this is for photologue
+# from photologue import PHOTOLOGUE_APP_DIR
 
 # setting our template location
 # note this is a tuple
@@ -135,6 +211,14 @@ TEMPLATE_DIRS = (
     # it will look for static and under static it will look for templates 
     os.path.join(os.path.dirname(BASE_DIR), "static", "templates"),
     
+    # this is for photologue
+    # PHOTOLOGUE_APP_DIR
+    
+    # Replaces the normal templates with the templates that used to come with 
+    # Photologue 2.X. Use these if you have an existing project that extends 
+    # these old-style templates.
+    # os.path.join(PHOTOLOGUE_TEMPLATE_DIR, 'contrib/old_style_templates'),
+
     # this is a reference:
     # '/home/dee-mann/Desktop/skillshare/static/templates/',
 
@@ -151,7 +235,7 @@ if DEBUG:
     
     # a tuple that collects CSS and JavaScript files
     # useful for production and collecting static files.
-    # note that this is a tuple.
+    # note that this is a tuple. This loads the static files
     STATICFILES_DIRS = (
         os.path.join(os.path.dirname(BASE_DIR), 'static', 'static'),
     )

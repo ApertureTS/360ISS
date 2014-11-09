@@ -1,8 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
+
 # provide the ability to pass a model out of the form to create fields
 from django.forms import ModelForm
 from drinker.models import Drinker
+
 
 class RegistrationForm(ModelForm):
     # u' <-- is the unicode string
@@ -31,17 +33,6 @@ class RegistrationForm(ModelForm):
 
     # clean method gets access to all the attributes submitted into the form
     def clean(self):
-
- ##########################
- # DELETE THIS  
-        # get what comes out of the POST
-        #password = self.cleaned_data['password']
-        #password1 = self.cleaned_data['password1']
-        #if password != password1:
-        #    raise forms.ValidationError("The passwords did not match. Please try again.")
-        #return password
- ##########################
-        
         # check if the passwords match then throw a validation error
         if self.cleaned_data['password'] != self.cleaned_data['password1']:
             raise forms.ValidationError("The passwords did not math. Pleate try again.")
@@ -51,4 +42,3 @@ class RegistrationForm(ModelForm):
 class LoginForm(forms.Form):
     username    = forms.CharField(label=(u'User Name'))
     password    = forms.CharField(label=(u'Password'), widget=forms.PasswordInput(render_value=False))
-    

@@ -22,6 +22,8 @@ class SignUp(models.Model):
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     
     # for special foreign users with special characters/accents
+    def __str__(self):
+        return unicode(self).encode('utf-8')
     def __unicode__(self):
         # self.email the instance we inputed when we are signing-up on our Django admin page
         return smart_unicode(self.email)
