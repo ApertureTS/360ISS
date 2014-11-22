@@ -27,7 +27,10 @@ SECRET_KEY = 'faiik0n61x)+=8m&z-o())ifijj(mii31+28_1xg_cb%td1*%3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # for when we want to find errors.
-DEBUG = True
+DEBUG = True 
+
+# not sure if I actually need this line of code for the MySQL database
+TEST = True
 
 TEMPLATE_DEBUG = DEBUG
 #TEMPLATE_DEBUG = True
@@ -48,6 +51,12 @@ ALLOWED_HOSTS = []
 # provide our get_profile()
 # provides authentication to the Django backend
 AUTH_PROFILE_MODULE = 'drinker.Drinker'
+# this is for the dragdrop images
+# AUTH_USER_MODEL = 'auth.User'
+
+
+
+
 
 # Application definition
 INSTALLED_APPS = (
@@ -60,42 +69,22 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
      # this is for django-photologue
     'django.contrib.sites',
-
     # my apps
     # 'signups',
     'drinker',
     'dragdrop',
-       
-    # this is for django-photologue
-    # 'photologue',
-    # 'sortedm2m',
     'south', # Only if you're relying on South for migrations
-    # 'photologue_custom',
-    # 'taggit',
-
-    # this is for django-imagekit
-    # this app was built using pip install django-imagekit, thats why we do not
-    # see a dedicated app folder
     'imagekit',
-
-    # this is for django-photo-albums
-    # 'generic_images',
     'annoying',
-    # 'photo_albums',
-
     # using ajax, this can possibly make things slightly easier
     # with images
     # 'django_ajax',
-
-    # using PHP in Django
-    # 'django_php',
-    
-    # this is the django ajax dynamic upload feature
-    # 'upload_image',
-    # 'fileupload',
+    'filter',
+    'storages',
+    'varnishapp',
+    'lettuce.django',
 )
 
 # for PHP
@@ -122,6 +111,9 @@ SOUTH_MIGRATION_MODULES = {
 # written to the database. Session reads only use the database if the data is 
 # not already in the cache.
 # 
+
+
+
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db" 
 
 # using file-based sessions
@@ -167,12 +159,20 @@ DATABASES = {
         #'PORT':'',
             
         # were using MySQL instead
-        #'ENGINE': 'django.db.backends.mysql',
-        #'NAME': 'mvp_landing_db',
-        #'USER': 'mvpland',
-        #'PASSWORD': '1293819318930JDSIOAJD!@#$*',
-        #'HOST': 'mysql.server',   # Or an IP Address that your DB is hosted on
-        #'PORT': '3306',
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'mydb',
+        # 'USER': 'mydb_user',
+        # 'PASSWORD': 'your_password',
+        # 'HOST': '',   # Or an IP Address that your DB is hosted on
+        # 'PORT': '',
+        
+        # this is for PostgreSQL
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'django_db',                      
+        # 'USER': 'django_login',                   
+        # 'PASSWORD': 'your_password',              
+        # 'HOST': 'localhost',                      
+        # 'PORT': '5432', 
     }
 }
 
@@ -239,3 +239,53 @@ if DEBUG:
     STATICFILES_DIRS = (
         os.path.join(os.path.dirname(BASE_DIR), 'static', 'static'),
     )
+
+
+# this is for Rackspace for when we deploy it on the cloud
+# CLOUDFILES_USERNAME = 'pnorman'
+# CLOUDFILES_API_KEY = 'dcaee6c3f989850ceeb61eaa8ea15637'
+# CLOUDFILES_CONTAINER = 'imageproject'
+# DEFAULT_FILE_STORAGE = 'backends.mosso.CloudFilesStorage'
+
+# Optional - use SSL, requires HTTPS
+# CLOUDFILES_SSL = True
+
+
+
+# this is for Django's memcache
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': [
+#             '172.19.26.240:11211',
+#             '172.19.26.242:11212',
+#             '172.19.26.244:11213',
+#         ]
+#     }
+# }
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+#         'LOCATION': 'cache_table',
+#     }
+# }
+
+# In this example, a filesystem backend is being configured with a timeout of 60 
+# seconds, and a maximum capacity of 1000 items:
+# 
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': '/var/tmp/django_cache',
+#         'TIMEOUT': 60,
+#         'OPTIONS': {
+#             'MAX_ENTRIES': 1000
+#         }
+#     }
+# }
+
+
+# this is for Varnish caching for HTTP acceleration
+VANRISH_WATCHED_MODELS = 'auth.user','drinker.Drinker'
+VARNISH_MANAGEMENT_ADDRS = 'server1:6082', 'server2:6082'
